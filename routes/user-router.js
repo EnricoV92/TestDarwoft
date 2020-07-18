@@ -6,7 +6,7 @@ var router = express.Router()
 router
     .get('/', userController.index)
     .get('/user')
-    .post('/user')
-    .put('/user')
+    .post('/user', userController.saveUser)
+    .put('/user', userController.updateUser)
     .delete('/user')
 module.exports = router
