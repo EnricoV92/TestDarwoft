@@ -9,6 +9,21 @@ userController.index = function(req, res) {
     })
 }
 
+userController.getUser = function (req, res) {
+    let dni = req.params.dni
+    userService.getUser(dni, function(err, user) {
+        if(err) res.send(err)
+        res.status(200).send(user)
+    })
+}
+
+userController.getAllUsers = function (req, res) {
+    userService.getAllUsers(function (err, users) {
+        if(err) res.send(err)
+        res.status(200).send(users)
+    })
+}
+
 userController.saveUser = function(req, res) {
     let dni = req.body.dni
     let name = req.body.name

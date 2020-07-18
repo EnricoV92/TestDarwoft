@@ -7,6 +7,14 @@ userService.createTable = function(cb) {
     userModel.createTable(cb)
 }
 
+userService.getUser = function (dni, cb) {
+    userModel.getUser(dni, cb)
+}
+
+userService.getAllUsers = function (cb) {
+    userModel.getAllUsers(cb)
+}
+
 userService.saveUser = function (dni, name, lastname, birthday, cb) {
     let user = []
     if(dni !== null || dni !== "") {
