@@ -1,3 +1,5 @@
+
+
 const path = require('path'),
     userService = require(path.join(__dirname, '..', 'services','user-service'))
 
@@ -17,8 +19,24 @@ userController.getUser = function (req, res) {
     })
 }
 
-userController.getAllUsers = function (req, res) {
+userController.getUsers = function (req, res) {
+    let filters = req.query
+    if(filters == {}) {
+        getAllUsers(res)
+    } else {
+        getUsers(filters, res)
+    }
+}
+
+function getAllUsers (res) {
     userService.getAllUsers(function (err, users) {
+        if(err) res.send(err)
+        res.status(200).send(users)
+    })
+}
+
+var getUsers = function (filters, res) {
+    userService.getUsers(filters, function(err, users) {
         if(err) res.send(err)
         res.status(200).send(users)
     })

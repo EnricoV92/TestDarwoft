@@ -5,10 +5,9 @@ const express = require('express'),
 var router = express.Router()
 router
     .get('/', userController.index)
-    .get('/user/:dni', userController.getUser)
-    .get('/users', userController.getAllUsers)
-
-    .post('/user', userController.saveUser)
-    .put('/user', userController.updateUser)
-    .delete('/user')
+    .get('/users/:dni', userController.getUser)
+    .get('/users', userController.getUsers)
+    .post('/users', userController.saveUser)
+    .put('/users', userController.updateUser)
+    .delete('/users/:dni')
 module.exports = router

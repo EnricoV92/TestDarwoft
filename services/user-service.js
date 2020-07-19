@@ -15,6 +15,10 @@ userService.getAllUsers = function (cb) {
     userModel.getAllUsers(cb)
 }
 
+userService.getUsers = function (filters, cb) {
+    userModel.getUsers(filters, cb)
+}
+
 userService.saveUser = function (dni, name, lastname, birthday, cb) {
     let user = []
     if(dni !== null || dni !== "") {

@@ -46,14 +46,72 @@ userModel.getAllUsers = function (cb) {
                 ORDER BY Dni `
 
     db.all(sql, [], function(err, rows) {
-                    if(err) cb(err.message)
-                    users = rows
-                })
+        if(err) cb(err.message)
+        users = rows
+    })
             
     db.close(function (err) {
-                    if(err) cb(err.message)
-                    cb(null, users)
-                })
+        if(err) cb(err.message)
+        cb(null, users)
+    })
+}
+
+userModel.getUsers = function(filter, cb) {
+    let conditions = buildConditions(filter)
+    let db = new sqlite3.Database(path.join(__dirname, '..','db','test.db'), function(err) {
+        if(err) console.log(err.message)
+    })
+    let sql = `SELECT Dni dni, Name name, Lastname lastname, Birthday birthday 
+                FROM  Users WHERE ` + conditions['where']
+    
+    console.log (sql)
+    db.all(sql, conditions['values'], function(err, rows) {
+        if(err) cb(err.message)
+        users = rows
+    })  
+    
+    db.close(function(err) {
+        if(err) cb(err.message)
+        cb(null, users)
+    })
+}
+
+function buildConditions (filter) {
+    let conditions = []
+    let values = []
+
+    if (filter['dateLesser']) {
+        conditions.push('Birthday < datetime(?)')
+        values.push(filter['dateLesser'])
+    }
+
+    if(filter['dateBigger']) {
+        conditions.push('Birthday > datetime(?)')
+        values.push(filter['dateBigger'])
+    }
+
+    if(filter['pattName']) {
+        conditions.push('name LIKE ?')
+        values.push('%' + filter['pattName'] + '%')
+    }
+
+    if(filter['pattLastname']) {
+        conditions.push('lastname LIKE ?')
+        values.push('%' + filter['pattLastname'] + '%')
+    }
+
+    if(filter['betweenDates']) {
+        if(filter['betweenDates']['dateInf'] && filter['betweenDates']['dateSup']) {
+            conditions.push('Birthday BETWEEN ? AND ?')
+            values.push(filter['betweenDates']['dateInf'], filter['betweenDates']['dateSup'] )
+        }
+    }
+
+
+    return {
+        where : conditions.length ? conditions.join(' OR ') : ' 1 ',
+        values : values
+    }
 }
 
 
