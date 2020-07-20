@@ -36,12 +36,18 @@ function getAllUsers (res) {
     })
 }
 
+/*filters = {dateLesser:"xxxxxx", dateBigger:"xxxxxx",
+                pattName:"xxxxx", pattLastname:"xxxxx", 
+                betweenDates: {dateInf: "xxxxxx", dateSup: "xxxxxx"}}
+*/
 function getUsers (filters, res) {
     userService.getUsers(filters, function(err, users) {
         if(err) res.send(err)
             else res.status(200).json(users)
     })
 }
+
+// JSON format for users {"dni": "xxxx", "name":"xxxxx","lastname":"xxxxx", "birthday":"YYYY-MM-DD"}
 
 userController.saveUser = function(req, res) {
     let userKeys = req.body

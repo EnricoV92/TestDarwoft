@@ -109,6 +109,7 @@ userService.deleteUser = function (dni, cb) {
     userModel.deleteUser(dni, cb)
 }
 
+//Valid Date format YYYY:MM:DD
 function validateDateFormat(date) {
     let dateFormat = /^(19|20)\d{2}[\-](0[1-9]|1[0-2])[\-](0[1-9]|[1-2][0-9]|3[01])$/
     return dateFormat.test(date)

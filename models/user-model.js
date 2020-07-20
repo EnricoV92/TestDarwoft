@@ -78,6 +78,8 @@ userModel.getUsers = function(filters, cb) {
     })
 }
 
+// Conditions for combine filters 
+
 function buildGetUsersConditions (filters) {
     let conditions = []
     let values = []
@@ -131,6 +133,7 @@ userModel.saveUser = function (userData, cb) {
     })
 }
 
+
 userModel.updateUser = function (dni, userData, cb) {
     let updateKeys = buildUpdateUser(userData)
     let db = new sqlite3.Database(path.join(__dirname, '..','db','test.db'), function(err) {
@@ -147,6 +150,7 @@ userModel.updateUser = function (dni, userData, cb) {
             else cb(null)
     })
 }
+
 
 function buildUpdateUser(userKeys) {
     let updateKeys = []
