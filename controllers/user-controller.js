@@ -6,8 +6,9 @@ const path = require('path'),
 var userController = () => { }
 
 userController.index = function(req, res) {
-    userService.createTable(function() {
-        res.status(200).send('Init Test OK! \nTabla Users creada')
+    userService.createTable(function(err) {
+        if(err) res.send(err)
+            else res.status(200).send('Init Test OK! \nTabla Users creada')
     })
 }
 
@@ -15,13 +16,13 @@ userController.getUser = function (req, res) {
     let dni = req.params.dni
     userService.getUser(dni, function(err, user) {
         if(err) res.send(err)
-        res.status(200).send(user)
+            else res.status(200).json(user)
     })
 }
 
 userController.getUsers = function (req, res) {
     let filters = req.query
-    if(filters == {}) {
+    if(!filters) {
         getAllUsers(res)
     } else {
         getUsers(filters, res)
@@ -31,36 +32,40 @@ userController.getUsers = function (req, res) {
 function getAllUsers (res) {
     userService.getAllUsers(function (err, users) {
         if(err) res.send(err)
-        res.status(200).send(users)
+            else res.status(200).json(users)
     })
 }
 
-var getUsers = function (filters, res) {
+function getUsers (filters, res) {
     userService.getUsers(filters, function(err, users) {
         if(err) res.send(err)
-        res.status(200).send(users)
+            else res.status(200).json(users)
     })
 }
 
 userController.saveUser = function(req, res) {
-    let dni = req.body.dni
-    let name = req.body.name
-    let lastname = req.body.lastname
-    let birthday = req.body.birthday
-
-    userService.saveUser(dni, name, lastname, birthday, function (err, key, user) {
-        if(key) res.status(503).send(`El campo ${key} es requerido`) 
-        res.status(200).send(`User con dni ${user} insertado con éxito`)
+    let userKeys = req.body
+    
+    userService.saveUser(userKeys, function (err, dni) {
+        if(err) res.send(err)
+            else res.status(200).send(`User con dni ${dni} insertado con éxito`)
     })
 }
 
 userController.updateUser = function (req, res) {
-    let userData = req.body
-
-    userService.updateUser(userData, function (err, key, dni) {
-        if(key) res.status(503).send(`El campo ${key} es requerido`)
-        res.status(200).send(`User con dni ${dni} actualizado con éxito`) 
+    let dni = req.params.dni
+    let userKeys = req.body
+    userService.updateUser(dni, userKeys, function (err) {
+        if(err) res.send(err)
+            else res.status(200).send(`User con dni ${dni} actualizado con éxito`) 
     })
 }
 
+userController.deleteUser = function (req, res) {
+    let dni = req.params.dni
+    userService.deleteUser(dni, function(err) {
+        if(err) res.send(err)
+            else res.status(200).send(`User con dni ${dni} eliminado con éxito`)
+    })
+}
 module.exports = userController

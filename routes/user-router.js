@@ -7,7 +7,9 @@ router
     .get('/', userController.index)
     .get('/users/:dni', userController.getUser)
     .get('/users', userController.getUsers)
+    
     .post('/users', userController.saveUser)
-    .put('/users', userController.updateUser)
-    .delete('/users/:dni')
+    .put('/users/:dni', userController.updateUser)
+    .delete('/users/:dni', userController.deleteUser)
+    
 module.exports = router
